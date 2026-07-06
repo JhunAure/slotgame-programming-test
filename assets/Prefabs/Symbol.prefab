@@ -150,6 +150,9 @@
     "transform": {
       "__id__": 2
     },
+    "sprite": {
+      "__id__": 4
+    },
     "_id": ""
   },
   {
@@ -165,6 +168,7 @@
       "__id__": 0
     },
     "fileId": "da7HllO05LLZxpVu1X4FRj",
-    "instance": null
+    "instance": null,
+    "targetOverrides": null
   }
 ]

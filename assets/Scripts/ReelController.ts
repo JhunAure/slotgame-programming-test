@@ -1,6 +1,7 @@
 import { _decorator, Component, Layout, Node, sp } from 'cc';
 import { Symbol } from "./Symbol";
 import { ESlotState } from "./ESlotState";
+import { SlotmachineManager } from './SlotmachineManager';
 
 const { ccclass, property } = _decorator;
 
@@ -27,7 +28,7 @@ export class ReelController extends Component {
             case ESlotState.Spinning:
                 this.updateSpin(deltaTime);
                 break;
-        } 
+        }
     }
 
     private initializeSymbols() {
@@ -35,9 +36,11 @@ export class ReelController extends Component {
         for (let i = 0; i < this.symbols.length; i++) {
             const symbol = this.symbols[i];
             symbol.initialize(i);
+            symbol.setData(SlotmachineManager.instance.getRandomSymbol(false));
 
             this.endYPosition = symbol.node.position.y;
         }
+
         this.symbolHeight = this.symbols[0].getHeight();
         this.reelHeight = this.symbols.length * (this.symbolHeight + this.layout.spacingY);
         this.endYPosition -= this.symbolHeight * 0.5;
@@ -52,6 +55,7 @@ export class ReelController extends Component {
 
             if (y < this.endYPosition) {
                 y += this.reelHeight;
+                this.symbols[i].setData(SlotmachineManager.instance.getRandomSymbol(false));
             }
 
             symbol.setPosition(symbol.position.x, y);
