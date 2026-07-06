@@ -1,13 +1,25 @@
-import { _decorator, Component } from "cc";
+import { _decorator, CCInteger, Component, Texture2D } from "cc";
 
 const { ccclass, property } = _decorator;
 
-@ccclass('SlotmachineManager')
+@ccclass("SymbolData")
+export class SymbolData
+{
+    @property(Texture2D) texture: Texture2D;
+    @property(CCInteger) value: number = 0;
+}
+
+@ccclass("SlotConfig")
+export class SlotConfig
+{
+    @property public spinSpeed = 1500;
+}
+
+@ccclass("SlotmachineManager")
 export class SlotmachineManager extends Component
 {
-    @property private spinSpeed = 1500;
-    @property private deceleration = 100;
-    @property private minStoppingSpeed = 200;
+    @property(SlotConfig) private config: SlotConfig = new SlotConfig();
+    @property([SymbolData]) private symbols: SymbolData[] = [];
 
     public static instance: SlotmachineManager;
 
@@ -16,7 +28,17 @@ export class SlotmachineManager extends Component
         SlotmachineManager.instance = this;
     }
 
-    public getSpinSpeed(): number {return this.spinSpeed;}
-    public getDeceleration(): number {return this.deceleration;}
-    public getMinStoppingSpeed(): number {return this.minStoppingSpeed;}
+    public getConfig(): SlotConfig
+    {
+        return this.config;
+    }
+
+    public getRandomReelSymbols(): SymbolData
+    {
+        if (this.symbols.length === 0)
+            return null;
+
+        const index = Math.floor(Math.random() * this.symbols.length);
+        return this.symbols[index];
+    }
 }

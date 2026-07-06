@@ -1,6 +1,7 @@
 import { _decorator, Button, Component, Node } from 'cc';
 import { ReelController } from './ReelController';
 import { ESlotState } from "./ESlotState";
+import { SlotConfig, SlotmachineManager } from './SlotmachineManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('SlotmachineController')
@@ -10,6 +11,7 @@ export class SlotmachineController extends Component {
     @property(Button) spinButton: Button;
 
     private state: ESlotState = ESlotState.Idling;
+    private slotConfig: SlotConfig;
 
     protected start() {
         this.spinButton?.node.on(Button.EventType.CLICK, this.onSpinButtonPressed, this);
@@ -22,6 +24,7 @@ export class SlotmachineController extends Component {
 
     private initialize() {
         this.state = ESlotState.Idling;
+        this.slotConfig = SlotmachineManager.instance.getConfig();
 
         for (let i = 0; i < this.reels.length; i++) {
             this.reels[i].initialize(i);
@@ -30,7 +33,7 @@ export class SlotmachineController extends Component {
 
     private onSpinButtonPressed() {
         for (let i = 0; i < this.reels.length; i++) {
-            this.reels[i].spin();
+            this.reels[i].spin(this.slotConfig.spinSpeed, i);
         }
     }
 }

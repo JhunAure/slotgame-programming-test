@@ -113,7 +113,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "e2ee2610-7947-4038-bfb0-1c287116a3fa@f9941",
+      "__uuid__": "b044eaeb-9619-45fa-8a62-56ab7795197b@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -147,6 +147,9 @@
     "__prefab": {
       "__id__": 7
     },
+    "transform": {
+      "__id__": 2
+    },
     "_id": ""
   },
   {
@@ -162,6 +165,6 @@
       "__id__": 0
     },
     "fileId": "da7HllO05LLZxpVu1X4FRj",
-    "targetOverrides": null
+    "instance": null
   }
 ]
