@@ -33,7 +33,7 @@ export class SlotmachineController extends Component {
 
     private onSpinButtonPressed() {
         for (let i = 0; i < this.reels.length; i++) {
-            this.reels[i].spin(this.slotConfig.spinSpeed, i);
+            this.reels[i].spin(this.slotConfig);
         }
     }
 }

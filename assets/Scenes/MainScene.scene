@@ -149,7 +149,9 @@
   },
   {
     "__type__": "SlotConfig",
-    "spinSpeed": 1500
+    "spinSpeed": 5000,
+    "spinDeceleration": 1500,
+    "spinDecelerationDelay": 1
   },
   {
     "__type__": "SymbolData",

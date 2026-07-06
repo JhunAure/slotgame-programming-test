@@ -1,7 +1,7 @@
 import { _decorator, Component, Layout, Node, sp } from 'cc';
 import { Symbol } from "./Symbol";
 import { ESlotState } from "./ESlotState";
-import { SlotmachineManager } from './SlotmachineManager';
+import { SlotConfig, SlotmachineManager } from './SlotmachineManager';
 
 const { ccclass, property } = _decorator;
 
@@ -18,6 +18,8 @@ export class ReelController extends Component {
 
     private spinSpeed: number;
     private spinStartDelay: number;
+    private spinDecelerationDelay: number;
+    private slotConfig: SlotConfig;
 
     protected start() {
 
@@ -32,7 +34,6 @@ export class ReelController extends Component {
     }
 
     private initializeSymbols() {
-
         for (let i = 0; i < this.symbols.length; i++) {
             const symbol = this.symbols[i];
             symbol.initialize(i);
@@ -47,6 +48,11 @@ export class ReelController extends Component {
     }
 
     private updateSpin(deltaTime: number) {
+        if (this.spinSpeed <= 0) {
+            this.state = ESlotState.Idling;
+            return;
+        }
+
         const distance = this.spinSpeed * deltaTime;
 
         for (let i = 0; i < this.symbols.length; i++) {
@@ -60,6 +66,21 @@ export class ReelController extends Component {
 
             symbol.setPosition(symbol.position.x, y);
         }
+
+
+        if(this.spinDecelerationDelay <= 0)
+        {
+            this.spinSpeed -= this.slotConfig.spinDeceleration * deltaTime;
+            return
+        }
+        this.spinDecelerationDelay -= deltaTime;
+    }
+
+    private setConfig(slotConfig: SlotConfig) {
+        this.slotConfig = slotConfig;
+        this.spinSpeed = slotConfig.spinSpeed;
+        this.spinStartDelay = this.index;
+        this.spinDecelerationDelay = this.slotConfig.spinDecelerationDelay;
     }
 
     public initialize(index: number) {
@@ -68,15 +89,13 @@ export class ReelController extends Component {
         this.initializeSymbols();
     }
 
-    public spin(speed: number, startDelay: number) {
-        this.spinSpeed = speed;
-        this.spinStartDelay = startDelay;
+    public spin(slotConfig: SlotConfig) {
+        this.setConfig(slotConfig);
         this.state = ESlotState.Spinning;
     }
 
-    public autoSpin(speed: number, startDelay: number) {
-        this.spinSpeed = speed;
-        this.spinStartDelay = startDelay;
+    public autoSpin(slotConfig: SlotConfig) {
+        this.setConfig(slotConfig);
         this.state = ESlotState.AutoSpinning;
     }
 
