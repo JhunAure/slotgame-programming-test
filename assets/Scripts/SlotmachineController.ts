@@ -1,7 +1,7 @@
 import { _decorator, Button, Component, Label, Node, Toggle } from 'cc';
 import { ReelController } from './ReelController';
 import { ESlotState } from "./ESlotState";
-import { SlotConfig, SlotmachineManager } from './SlotmachineManager';
+import { SlotConfig, SlotmachineManager, SpinResult } from './SlotmachineManager';
 import { ISlotmachineController } from './ISlotmachingController';
 const { ccclass, property } = _decorator;
 
@@ -16,6 +16,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     private slotConfig: SlotConfig;
 
     private reelCompletedSpin: number;
+    private spinResult: SpinResult;
 
     protected onEnable() {
         this.spinButton?.node.on(Button.EventType.CLICK, this.onSpinButtonPressed, this);
@@ -52,13 +53,13 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     }
 
     private startSpin() {
-        var spinResult = SlotmachineManager.instance.generateSpinResult();
-        spinResult.print();
+        this.spinResult = SlotmachineManager.instance.generateSpinResult();
+        this.spinResult.print();
 
         this.reelCompletedSpin = 0;
 
         for (let i = 0; i < this.reels.length; i++) {
-            this.reels[i].setSpinResult(spinResult.reels[i]);
+            this.reels[i].setSpinResult(this.spinResult.reels[i]);
             this.reels[i].startSpin(this.autoSpinToggle.isChecked);
         }
     }
@@ -78,9 +79,11 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         this.reelCompletedSpin++;
 
         if (this.reelCompletedSpin >= this.reels.length) {
+            const matchResults = this.spinResult.getMatches();
+            
             for (let i = 0; i < this.reels.length; i++) {
                 const reel = this.reels[i];
-                reel.startMatching();
+                reel.startMatching(matchResults[i]);
             }
 
             if (this.state === ESlotState.AutoSpinning) {

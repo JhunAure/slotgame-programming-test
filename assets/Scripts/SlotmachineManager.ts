@@ -1,11 +1,12 @@
-import { _decorator, CCInteger, Component, SpriteFrame } from "cc";
+import { _decorator, CCInteger, CCString, Component, SpriteFrame } from "cc";
+import { EPaylineTypes } from "./EPaylineTypes";
 
 const { ccclass, property } = _decorator;
 
 @ccclass("SymbolData")
 export class SymbolData {
     @property(SpriteFrame) texture: SpriteFrame = null!;
-    @property(String) name = "";
+    @property(CCString) name = "";
     @property(CCInteger) value = 0;
 }
 
@@ -18,6 +19,24 @@ export class SlotConfig {
     @property visibleRows = 3;
 }
 
+export class MatchResult {
+    constructor(
+        public payline: number,
+        public symbol: SymbolData,
+        public count: number
+    ) { }
+
+}
+
+const PAYLINES = [
+    { type: EPaylineTypes.Top, rows: [1, 1, 1] },
+    { type: EPaylineTypes.Middle, rows: [2, 2, 2] },
+    { type: EPaylineTypes.Bottom, rows: [3, 3, 3] },
+    { type: EPaylineTypes.TopLeftBottomRight, rows: [1, 2, 3] },
+    { type: EPaylineTypes.TopRightBottomLeft, rows: [3, 2, 1] },
+];
+
+
 @ccclass("SpinResult")
 export class SpinResult {
 
@@ -27,15 +46,41 @@ export class SpinResult {
         this.reels = reels;
     }
 
+    public getMatches(): MatchResult[] {
+        const matches: MatchResult[] = [];
+
+        for (const payline of PAYLINES) {
+
+            const symbolData = this.reels[0][payline.rows[0]];
+            let matched = true;
+
+            for (let reel = 1; reel < this.reels.length; reel++) {
+                if (this.reels[reel][payline.rows[reel]].value !== symbolData.value) {
+                    matched = false;
+                    break;
+                }
+            }
+
+            if (matched) {
+                matches.push(new MatchResult(payline.type, symbolData, this.reels.length));
+                console.log(`[MATCH] ${EPaylineTypes[payline.type]} - Symbol ${symbolData.value}`);
+            }
+        }
+        if(matches == null || matches.length <= 0){
+            console.log(`[NO MATCH]`);
+        }
+        return matches;
+    }
+
     public print() {
         console.log("=== Spin Result ===");
 
-        for (let row = 0; row < this.reels[0].length; row++) {
+        for (let x = 0; x < this.reels[0].length; x++) {
 
             let line = "";
 
-            for (let reel = 0; reel < this.reels.length; reel++) {
-                line += this.reels[reel][row].name + "\t";
+            for (let y = 0; y < this.reels.length; y++) {
+                line += this.reels[y][x].name + "\t";
             }
 
             console.log(line);

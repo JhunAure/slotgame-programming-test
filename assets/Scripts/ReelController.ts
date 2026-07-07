@@ -1,7 +1,7 @@
 import { _decorator, Component, Layout } from 'cc';
 import { Symbol } from './Symbol';
 import { ESlotState } from './ESlotState';
-import { SlotConfig, SlotmachineManager, SymbolData } from './SlotmachineManager';
+import { MatchResult, SlotConfig, SlotmachineManager, SymbolData } from './SlotmachineManager';
 import { ISlotmachineController } from './ISlotmachingController';
 
 const { ccclass, property } = _decorator;
@@ -83,8 +83,7 @@ export class ReelController extends Component {
         this.state = autoSpin ? ESlotState.AutoSpinning : ESlotState.Spinning;
     }
 
-    public startMatching() {
-
+    public startMatching(matchResult: MatchResult) {
     }
 
     public stopSpin() {
@@ -172,6 +171,7 @@ export class ReelController extends Component {
             symbol.setData(this.spinResult[i]);
             symbol.node.setPosition(symbol.node.position.x, this.initialPositions[i]);
         }
+        this.controller.onReelSpinCompleted();
     }
 
     private calculateSpeedByDistance(distance: number): number {
