@@ -2,6 +2,7 @@ import { _decorator, Component, Layout } from 'cc';
 import { Symbol } from './Symbol';
 import { ESlotState } from './ESlotState';
 import { SlotConfig, SlotmachineManager } from './SlotmachineManager';
+import { ISlotmachineController } from './SlotmachineController';
 
 const { ccclass, property } = _decorator;
 
@@ -14,6 +15,7 @@ export class ReelController extends Component {
     private state = ESlotState.Idling;
 
     private slotConfig: SlotConfig;
+    private controller: ISlotmachineController;
 
     private symbolHeight = 0;
     private reelHeight = 0;
@@ -29,20 +31,26 @@ export class ReelController extends Component {
     private speed = 0;
 
     protected update(dt: number) {
-        if (this.state !== ESlotState.Spinning)
-            return;
-
-        this.updateSpin(dt);
+        switch (this.state) {
+            case ESlotState.Spinning:
+            case ESlotState.AutoSpinning:
+                this.updateSpin(dt);
+                break;
+            case ESlotState.Matching:
+                this.updateMatching(dt);
+                break;
+        }
     }
 
-    public initialize(index: number, config: SlotConfig) {
+    public initialize(index: number, controller: ISlotmachineController) {
         this.index = index;
-        this.slotConfig = config;
+        this.controller = controller;
+        this.slotConfig = controller.getConfig();
         this.state = ESlotState.Idling;
         this.initializeSymbols();
     }
 
-    public spin(autoSpin: boolean) {
+    public startSpin(autoSpin: boolean) {
         this.speed = this.slotConfig.spinSpeed;
         this.targetRotations = this.slotConfig.reelRotations;
 
@@ -53,8 +61,13 @@ export class ReelController extends Component {
         this.state = autoSpin ? ESlotState.AutoSpinning : ESlotState.Spinning;
     }
 
-    public skipSpin() {
+    public startMatching() {
+        
+    }
+
+    public stopSpin() {
         this.stopSymbols();
+        this.state = ESlotState.Idling;
     }
 
     private initializeSymbols() {
@@ -79,6 +92,8 @@ export class ReelController extends Component {
 
         if (remainingDistance <= 0.001) {
             this.stopSymbols();
+            this.state = ESlotState.Idling;
+            this.controller.onReelSpinCompleted();
             return;
         }
 
@@ -89,6 +104,10 @@ export class ReelController extends Component {
         this.traveledDistance += Math.min(this.speed * dt, remainingDistance);
 
         this.moveSymbols();
+    }
+
+    private updateMatching(dt: number) {
+
     }
 
     private moveSymbols() {
@@ -117,7 +136,6 @@ export class ReelController extends Component {
         this.traveledDistance = this.targetDistance;
         this.speed = 0;
         this.moveSymbols();
-        this.state = ESlotState.Idling;
     }
 
     private calculateSpeedByDistance(distance: number): number {
