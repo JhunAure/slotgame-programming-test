@@ -50,7 +50,7 @@ export class ReelController extends Component {
         this.targetDistance = this.calculateTargetDistance();
         this.deceleration = this.calculateDeceleration();
 
-        this.state = autoSpin? ESlotState.AutoSpinning: ESlotState.Spinning;
+        this.state = autoSpin ? ESlotState.AutoSpinning : ESlotState.Spinning;
     }
 
     public skipSpin() {
@@ -92,16 +92,21 @@ export class ReelController extends Component {
     }
 
     private moveSymbols() {
-        // currentDistanceInLoop = current traveled distance within one reel loop
         const currentDistanceInLoop = this.traveledDistance % this.reelHeight;
 
         for (let i = 0; i < this.symbols.length; i++) {
-            const symbolNode = this.symbols[i].node;
+            const symbol = this.symbols[i];
+            const symbolNode = symbol.node;
+
             let nextYPos = this.initialPositions[i] - currentDistanceInLoop;
 
-            // if the symbol reached the bottom end or the reel move the symbol at the top of the reel
             if (nextYPos < this.bottomEndY) {
                 nextYPos += this.reelHeight;
+            }
+
+            // check if the symbol was moved to the top then update its data
+            if (nextYPos > symbolNode.position.y) {
+                symbol.setData(SlotmachineManager.instance.getRandomSymbol(false));
             }
 
             symbolNode.setPosition(symbolNode.position.x, nextYPos);
@@ -119,12 +124,12 @@ export class ReelController extends Component {
         // get the speed by the given distance using the constant acceleration equation
         return Math.sqrt(2 * this.deceleration * distance);
     }
-    
+
     private calculateDeceleration(): number {
         return (this.speed * this.speed) / (2 * this.targetDistance);
     }
 
-    private calculateTargetDistance(): number{
+    private calculateTargetDistance(): number {
         return this.targetRotations * this.reelHeight;
     }
 
