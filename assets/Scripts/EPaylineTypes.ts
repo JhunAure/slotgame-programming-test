@@ -4,5 +4,17 @@ export enum EPaylineTypes
     Middle,
     Bottom,
     TopLeftBottomRight,
-    TopRightBottomLeft
+    TopRightBottomLeft,
+    TopTopMiddle,
+    TopMiddleMiddle,
+    MiddleMiddleTop,
+    MiddleTopTop,
+    MiddleMiddleBottom,
+    MiddleBottomBottom,
+    BottomBottomMiddle,
+    BottomMiddleMiddle,
+    TopTopBottom,
+    BottomBottomTop,
+    TopBottomBottom,
+    BottomTopTop,
 }

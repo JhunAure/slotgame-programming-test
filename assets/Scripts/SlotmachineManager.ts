@@ -17,23 +17,34 @@ export class SlotConfig {
 
     @property reelCount = 5;
     @property visibleRows = 3;
+
+    @property matchStartDelay = 1;
 }
 
 export class MatchResult {
     constructor(
-        public payline: number,
+        public payline: EPaylineTypes,
+        public rows: number[],
         public symbol: SymbolData,
-        public count: number
     ) { }
 
 }
 
 const PAYLINES = [
+    // HORIZONTAL
     { type: EPaylineTypes.Top, rows: [1, 1, 1] },
     { type: EPaylineTypes.Middle, rows: [2, 2, 2] },
     { type: EPaylineTypes.Bottom, rows: [3, 3, 3] },
+
+    // DIAGONAL
     { type: EPaylineTypes.TopLeftBottomRight, rows: [1, 2, 3] },
     { type: EPaylineTypes.TopRightBottomLeft, rows: [3, 2, 1] },
+
+    // LSHAPE
+    { type: EPaylineTypes.TopMiddleMiddle, rows: [1, 2, 2] },
+    { type: EPaylineTypes.MiddleMiddleTop, rows: [2, 2, 1] },
+    { type: EPaylineTypes.MiddleMiddleBottom, rows: [2, 2, 3] },
+    { type: EPaylineTypes.BottomMiddleMiddle, rows: [3, 2, 2] },
 ];
 
 
@@ -62,7 +73,7 @@ export class SpinResult {
             }
 
             if (matched) {
-                matches.push(new MatchResult(payline.type, symbolData, this.reels.length));
+                matches.push(new MatchResult(payline.type, payline.rows, symbolData));
                 console.log(`[MATCH] ${EPaylineTypes[payline.type]} - Symbol ${symbolData.value}`);
             }
         }

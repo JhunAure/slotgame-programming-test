@@ -15,9 +15,12 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     private state: ESlotState = ESlotState.Idling;
     private slotConfig: SlotConfig;
 
-    private reelCompletedSpin: number;
+    private reelSequenceCounter: number;
     private spinResult: SpinResult;
 
+    private totalMatchedPaylines : number;
+    private readonly autoSpinCallback = ()=> this.startSpin();
+ 
     protected onEnable() {
         this.spinButton?.node.on(Button.EventType.CLICK, this.onSpinButtonPressed, this);
     }
@@ -43,8 +46,8 @@ export class SlotmachineController extends Component implements ISlotmachineCont
 
     private onSpinButtonPressed() {
         if (this.state != ESlotState.Idling && this.state != ESlotState.Matching) {
-            this.stopSpin();
             this.updateState(ESlotState.Idling);
+            this.stopSpin();
         }
         else {
             this.updateState(this.autoSpinToggle.isChecked ? ESlotState.AutoSpinning : ESlotState.Spinning);
@@ -53,10 +56,13 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     }
 
     private startSpin() {
+        this.unscheduleAllCallbacks();
+
         this.spinResult = SlotmachineManager.instance.generateSpinResult();
         this.spinResult.print();
 
-        this.reelCompletedSpin = 0;
+        this.reelSequenceCounter = 0;
+        this.totalMatchedPaylines = 0;
 
         for (let i = 0; i < this.reels.length; i++) {
             this.reels[i].setSpinResult(this.spinResult.reels[i]);
@@ -65,6 +71,8 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     }
 
     private stopSpin() {
+        this.unscheduleAllCallbacks();
+
         for (let i = 0; i < this.reels.length; i++) {
             this.reels[i].stopSpin();
         }
@@ -76,23 +84,51 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     }
 
     public onReelSpinCompleted() {
-        this.reelCompletedSpin++;
+        this.reelSequenceCounter++;
 
-        if (this.reelCompletedSpin >= this.reels.length) {
+        if (this.reelSequenceCounter >= this.reels.length) {
+            this.reelSequenceCounter = 0;
+
             const matchResults = this.spinResult.getMatches();
-            
-            for (let i = 0; i < this.reels.length; i++) {
-                const reel = this.reels[i];
-                reel.startMatching(matchResults[i]);
+            this.totalMatchedPaylines = matchResults.length * this.reels.length;
+
+            if(this.totalMatchedPaylines <= 0)
+            {
+                this.endSequence();
+                return;
             }
 
-            if (this.state === ESlotState.AutoSpinning) {
-                this.startSpin();
-            }
-            else{
-                this.updateState(ESlotState.Idling);
-            }
+            this.spinButton.interactable = false;
+            
+            this.scheduleOnce(() => {
+                for (const reel of this.reels) {
+                    reel.startMatching(matchResults);
+                }
+            }, this.slotConfig.matchStartDelay);
         }
+    }
+
+    public onReelMatchCompleted() {
+        this.reelSequenceCounter++;
+        const totalSequenceCount = this.totalMatchedPaylines <= 0? this.reels.length: this.totalMatchedPaylines;
+
+        if (this.reelSequenceCounter >= totalSequenceCount) {
+            this.reelSequenceCounter = 0;
+            this.totalMatchedPaylines = 0;
+            this.endSequence();
+        }
+    }
+
+    private endSequence() {
+        if (this.state === ESlotState.AutoSpinning) {
+            this.scheduleOnce(this.autoSpinCallback, 1);
+        }
+        else {
+            this.unscheduleAllCallbacks();
+            this.updateState(ESlotState.Idling);
+        }
+        
+        this.spinButton.interactable = true;
     }
 
     public getConfig(): SlotConfig {

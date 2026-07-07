@@ -55,9 +55,6 @@ export class ReelController extends Component {
             case ESlotState.AutoSpinning:
                 this.updateSpin(dt);
                 break;
-            case ESlotState.Matching:
-                this.updateMatching(dt);
-                break;
         }
     }
 
@@ -80,10 +77,24 @@ export class ReelController extends Component {
         this.isFinalRotation = false;
         this.spinResultIndex = 0;
 
+        this.stopMatchAnimations();
+
         this.state = autoSpin ? ESlotState.AutoSpinning : ESlotState.Spinning;
     }
 
-    public startMatching(matchResult: MatchResult) {
+    public startMatching(matches: MatchResult[]) {
+        for (let i = 0; i < this.symbols.length; i++) {
+            this.symbols[i].setGrayscale(true);
+        }
+
+        for (const match of matches) {
+            const row = match.rows[this.index];
+
+            this.symbols[row].setGrayscale(false);
+            this.symbols[row].playMatchAnimation(() => 
+                this.controller.onReelMatchCompleted()
+            );
+        }
     }
 
     public stopSpin() {
@@ -105,6 +116,15 @@ export class ReelController extends Component {
 
         this.reelHeight = this.calculateReelHeight();
         this.bottomEndY = this.calculateBottomEndPos();
+    }
+
+    private stopMatchAnimations()
+    {
+        for (let i = 0; i < this.symbols.length; i++) {
+            const symbol = this.symbols[i];
+            symbol.stopMatchAnimation();
+            symbol.setGrayscale(false);
+        }
     }
 
     private updateSpin(dt: number) {
@@ -130,10 +150,6 @@ export class ReelController extends Component {
         this.traveledDistance += Math.min(this.speed * dt, remainingDistance);
 
         this.updateSymbols();
-    }
-
-    private updateMatching(dt: number) {
-
     }
 
     private updateSymbols() {
