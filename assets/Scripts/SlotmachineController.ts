@@ -89,28 +89,37 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     private startSpin() {
         this.unscheduleAllCallbacks();
 
+        const reelSpinStartDelay = this.slotConfig.spinSpeedModes[this.speedMode].reelSpinStartDelay;
+
+        if(reelSpinStartDelay > 0){
+            this.toggleSpinButtonInteraction(false); // prevent spin/stop button getting spammed
+        }
+
         this.spinResult = SlotmachineManager.instance.generateSpinResult();
         this.spinResult.print();
 
         this.reelSequenceCounter = 0;
         this.totalMatchedPaylines = 0;
 
-        const reelSpinStartDelay = this.slotConfig.spinSpeedModes[this.speedMode].reelSpinStartDelay;
 
         for (let i = 0; i < this.reels.length; i++) {
             this.reels[i].setSpinResult(this.spinResult.reels[i]);
 
-            if(reelSpinStartDelay > 0){
-                this.scheduleOnce(()=>this.spinReel(i), i * reelSpinStartDelay)
+            if (reelSpinStartDelay > 0) {
+                this.scheduleOnce(() => this.spinReel(i, this.speedMode), i * reelSpinStartDelay)
             }
-            else{
-                this.spinReel(i);
+            else {
+                this.spinReel(i, this.speedMode);
             }
         }
     }
 
-    private spinReel(i: number) {
-        this.reels[i].startSpin(this.autoSpinToggle.isChecked, this.speedMode);
+    private spinReel(i: number, spinMode: ESpinSpeedMode) {
+        this.reels[i].startSpin(this.autoSpinToggle.isChecked, spinMode);
+
+        // reenable spin button if all reels has started spinning, to prevent unwanted behavior when spamming spin/stop 
+        if(i >= this.reels.length - 1)
+            this.toggleSpinButtonInteraction(true);
     }
 
     private stopSpin() {
@@ -119,6 +128,11 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         for (let i = 0; i < this.reels.length; i++) {
             this.reels[i].stopSpin();
         }
+    }
+
+    private toggleSpinButtonInteraction(interactable: boolean) {
+        this.spinButton.interactable = interactable;
+        this.spinButtonLabel.string = !interactable? "WAIT" : this.state === ESlotState.Idling ? "SPIN" : "STOP";
     }
 
     private updateState(state: ESlotState) {
@@ -140,7 +154,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
                 return;
             }
 
-            this.spinButton.interactable = false;
+            this.toggleSpinButtonInteraction(false);
 
             this.scheduleOnce(() => {
                 for (const reel of this.reels) {
@@ -170,7 +184,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
             this.updateState(ESlotState.Idling);
         }
 
-        this.spinButton.interactable = true;
+        this.toggleSpinButtonInteraction(true);
     }
 
     public getConfig(): SlotConfig {
