@@ -89,7 +89,6 @@ export class ReelController extends Component {
 
     public stopSpin() {
         this.stopSymbols();
-        this.state = ESlotState.Idling;
     }
 
     private initializeSymbols() {
@@ -114,7 +113,6 @@ export class ReelController extends Component {
 
         if (remainingDistance <= 0.001) {
             this.stopSymbols();
-            this.state = ESlotState.Idling;
             this.controller.onReelSpinCompleted();
             return;
         }
@@ -132,14 +130,14 @@ export class ReelController extends Component {
         // get the next move distance from speed or the remaining distance which ever the smallest 
         this.traveledDistance += Math.min(this.speed * dt, remainingDistance);
 
-        this.moveSymbols();
+        this.updateSymbols();
     }
 
     private updateMatching(dt: number) {
 
     }
 
-    private moveSymbols() {
+    private updateSymbols() {
         const currentDistanceInLoop = this.traveledDistance % this.reelHeight;
 
         for (let i = 0; i < this.symbols.length; i++) {
@@ -164,7 +162,16 @@ export class ReelController extends Component {
     private stopSymbols() {
         this.traveledDistance = this.targetDistance;
         this.speed = 0;
-        this.moveSymbols();
+        this.skipToResult();
+        this.state = ESlotState.Idling;
+    }
+
+    private skipToResult() {
+        for (let i = 0; i < this.symbols.length; i++) {
+            const symbol = this.symbols[i];
+            symbol.setData(this.spinResult[i]);
+            symbol.node.setPosition(symbol.node.position.x, this.initialPositions[i]);
+        }
     }
 
     private calculateSpeedByDistance(distance: number): number {
