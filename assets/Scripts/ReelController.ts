@@ -3,6 +3,7 @@ import { Symbol } from './Symbol';
 import { ESlotState } from './ESlotState';
 import { MatchResult, SlotConfig, SlotmachineManager, SymbolData } from './SlotmachineManager';
 import { ISlotmachineController } from './ISlotmachingController';
+import { ESpinSpeedMode } from './ESpinSpeedMode';
 
 const { ccclass, property } = _decorator;
 
@@ -66,9 +67,9 @@ export class ReelController extends Component {
         this.initializeSymbols();
     }
 
-    public startSpin(autoSpin: boolean) {
-        this.speed = this.slotConfig.spinSpeed;
-        this.targetRotations = this.slotConfig.reelRotations;
+    public startSpin(autoSpin: boolean, speedMode: ESpinSpeedMode) {
+        this.speed = this.slotConfig.spinSpeedModes[speedMode].spinSpeed;
+        this.targetRotations = this.slotConfig.spinSpeedModes[speedMode].reelRotations;
 
         this.traveledDistance = 0;
         this.targetDistance = this.calculateTargetDistance();

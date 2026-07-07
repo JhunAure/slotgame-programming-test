@@ -10,15 +10,21 @@ export class SymbolData {
     @property(CCInteger) value = 0;
 }
 
-@ccclass("SlotConfig")
-export class SlotConfig {
+@ccclass("SpinSpeedModeConfig")
+export class SpinSpeedModeConfig {
     @property spinSpeed = 1500;
     @property reelRotations = 10;
+    @property reelSpinStartDelay = 0.5;
+    @property matchStartDelay = 0.5;
+    @property matchEndDelay = 0.5;
+}
 
-    @property reelCount = 5;
-    @property visibleRows = 3;
+@ccclass("SlotConfig")
+export class SlotConfig {
+    @property(SpinSpeedModeConfig) spinSpeedModes: SpinSpeedModeConfig[] = [];
 
-    @property matchStartDelay = 1;
+    @property reelCount = 3;
+    @property visibleRows = 5;
 }
 
 export class MatchResult {

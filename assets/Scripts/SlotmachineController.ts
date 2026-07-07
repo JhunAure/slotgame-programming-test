@@ -1,16 +1,20 @@
-import { _decorator, Button, Component, Label, Node, Toggle } from 'cc';
+import { _decorator, Button, Component, Label, Node, Toggle, ToggleContainer } from 'cc';
 import { ReelController } from './ReelController';
 import { ESlotState } from "./ESlotState";
 import { SlotConfig, SlotmachineManager, SpinResult } from './SlotmachineManager';
 import { ISlotmachineController } from './ISlotmachingController';
+import { ESpinSpeedMode } from './ESpinSpeedMode';
 const { ccclass, property } = _decorator;
 
 @ccclass('SlotmachineController')
 export class SlotmachineController extends Component implements ISlotmachineController {
-    @property(ReelController) reels: ReelController[] = []
+    @property(ReelController) reels: ReelController[] = [];
     @property(Button) spinButton: Button;
     @property(Label) spinButtonLabel: Label;
     @property(Toggle) autoSpinToggle: Toggle;
+    @property(Toggle) spinSpeedToggle1: Toggle;
+    @property(Toggle) spinSpeedToggle2: Toggle;
+    @property(Toggle) spinSpeedToggle3: Toggle;
 
     private state: ESlotState = ESlotState.Idling;
     private slotConfig: SlotConfig;
@@ -18,15 +22,37 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     private reelSequenceCounter: number;
     private spinResult: SpinResult;
 
-    private totalMatchedPaylines : number;
-    private readonly autoSpinCallback = ()=> this.startSpin();
- 
+    private totalMatchedPaylines: number;
+
+    private speedMode: ESpinSpeedMode;
+
+    private readonly autoSpinCallback = () => this.startSpin();
+
     protected onEnable() {
+        this.spinSpeedToggle1?.node.on(Button.EventType.CLICK, this.onToggleFirstSpeed, this);
+        this.spinSpeedToggle2?.node.on(Button.EventType.CLICK, this.onToggleSecondSpeed, this);
+        this.spinSpeedToggle3?.node.on(Button.EventType.CLICK, this.onToggleThirdSpeed, this);
         this.spinButton?.node.on(Button.EventType.CLICK, this.onSpinButtonPressed, this);
     }
 
     protected onDisable(): void {
+        this.unscheduleAllCallbacks();
+        this.spinSpeedToggle1?.node.off(Button.EventType.CLICK, this.onToggleFirstSpeed, this);
+        this.spinSpeedToggle2?.node.off(Button.EventType.CLICK, this.onToggleSecondSpeed, this);
+        this.spinSpeedToggle3?.node.off(Button.EventType.CLICK, this.onToggleThirdSpeed, this);
         this.spinButton?.node.off(Button.EventType.CLICK, this.onSpinButtonPressed, this);
+    }
+
+    private onToggleFirstSpeed() {
+        this.speedMode = ESpinSpeedMode.Normal;
+    }
+
+    private onToggleSecondSpeed() {
+        this.speedMode = ESpinSpeedMode.Fast;
+    }
+
+    private onToggleThirdSpeed() {
+        this.speedMode = ESpinSpeedMode.SuperFast;
     }
 
     protected start() {
@@ -36,7 +62,12 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     private initialize() {
         this.slotConfig = SlotmachineManager.instance.getConfig();
 
+        this.speedMode = ESpinSpeedMode.Normal;
+        this.spinSpeedToggle1.isChecked = true;
+        this.spinSpeedToggle2.isChecked = false;
+        this.spinSpeedToggle3.isChecked = false;
         this.autoSpinToggle.isChecked = false;
+
         this.updateState(ESlotState.Idling);
 
         for (let i = 0; i < this.reels.length; i++) {
@@ -64,10 +95,22 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         this.reelSequenceCounter = 0;
         this.totalMatchedPaylines = 0;
 
+        const reelSpinStartDelay = this.slotConfig.spinSpeedModes[this.speedMode].reelSpinStartDelay;
+
         for (let i = 0; i < this.reels.length; i++) {
             this.reels[i].setSpinResult(this.spinResult.reels[i]);
-            this.reels[i].startSpin(this.autoSpinToggle.isChecked);
+
+            if(reelSpinStartDelay > 0){
+                this.scheduleOnce(()=>this.spinReel(i), i * reelSpinStartDelay)
+            }
+            else{
+                this.spinReel(i);
+            }
         }
+    }
+
+    private spinReel(i: number) {
+        this.reels[i].startSpin(this.autoSpinToggle.isChecked, this.speedMode);
     }
 
     private stopSpin() {
@@ -92,25 +135,24 @@ export class SlotmachineController extends Component implements ISlotmachineCont
             const matchResults = this.spinResult.getMatches();
             this.totalMatchedPaylines = matchResults.length * this.reels.length;
 
-            if(this.totalMatchedPaylines <= 0)
-            {
+            if (this.totalMatchedPaylines <= 0) {
                 this.endSequence();
                 return;
             }
 
             this.spinButton.interactable = false;
-            
+
             this.scheduleOnce(() => {
                 for (const reel of this.reels) {
                     reel.startMatching(matchResults);
                 }
-            }, this.slotConfig.matchStartDelay);
+            }, this.slotConfig.spinSpeedModes[this.speedMode].matchStartDelay);
         }
     }
 
     public onReelMatchCompleted() {
         this.reelSequenceCounter++;
-        const totalSequenceCount = this.totalMatchedPaylines <= 0? this.reels.length: this.totalMatchedPaylines;
+        const totalSequenceCount = this.totalMatchedPaylines <= 0 ? this.reels.length : this.totalMatchedPaylines;
 
         if (this.reelSequenceCounter >= totalSequenceCount) {
             this.reelSequenceCounter = 0;
@@ -121,13 +163,13 @@ export class SlotmachineController extends Component implements ISlotmachineCont
 
     private endSequence() {
         if (this.state === ESlotState.AutoSpinning) {
-            this.scheduleOnce(this.autoSpinCallback, 1);
+            this.scheduleOnce(this.autoSpinCallback, this.slotConfig.spinSpeedModes[this.speedMode].matchEndDelay);
         }
         else {
             this.unscheduleAllCallbacks();
             this.updateState(ESlotState.Idling);
         }
-        
+
         this.spinButton.interactable = true;
     }
 
