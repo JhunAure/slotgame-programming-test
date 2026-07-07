@@ -1,8 +1,8 @@
 import { _decorator, Component, Layout } from 'cc';
 import { Symbol } from './Symbol';
 import { ESlotState } from './ESlotState';
-import { SlotConfig, SlotmachineManager } from './SlotmachineManager';
-import { ISlotmachineController } from './SlotmachineController';
+import { SlotConfig, SlotmachineManager, SymbolData } from './SlotmachineManager';
+import { ISlotmachineController } from './ISlotmachingController';
 
 const { ccclass, property } = _decorator;
 
@@ -29,6 +29,25 @@ export class ReelController extends Component {
     private targetRotations = 0;
     private deceleration = 0;
     private speed = 0;
+
+    private spinResult: SymbolData[] = [];
+    private spinResultIndex = 0;
+    private isFinalRotation = false;
+
+    public setSpinResult(symbols: SymbolData[]) {
+        this.spinResult = symbols;
+        this.spinResultIndex = 0;
+    }
+
+    private getResultSymbol(): SymbolData {
+        if (this.isFinalRotation) {
+            const symbol = this.spinResult[this.spinResult.length - 1 - this.spinResultIndex];
+            this.spinResultIndex++;
+            return symbol;
+        }
+
+        return SlotmachineManager.instance.getRandomSymbol(false);
+    }
 
     protected update(dt: number) {
         switch (this.state) {
@@ -58,11 +77,14 @@ export class ReelController extends Component {
         this.targetDistance = this.calculateTargetDistance();
         this.deceleration = this.calculateDeceleration();
 
+        this.isFinalRotation = false;
+        this.spinResultIndex = 0;
+
         this.state = autoSpin ? ESlotState.AutoSpinning : ESlotState.Spinning;
     }
 
     public startMatching() {
-        
+
     }
 
     public stopSpin() {
@@ -97,6 +119,13 @@ export class ReelController extends Component {
             return;
         }
 
+        const loopsRemaining = Math.ceil(remainingDistance / this.reelHeight);
+
+        // flag if this is the last loop remaining in this reel
+        if (!this.isFinalRotation && loopsRemaining <= 1) {
+            this.isFinalRotation = true;
+        }
+
         // make the speed vary by the remaining distance, slows down when distance is small
         this.speed = this.calculateSpeedByDistance(remainingDistance);
 
@@ -125,7 +154,7 @@ export class ReelController extends Component {
 
             // check if the symbol was moved to the top then update its data
             if (nextYPos > symbolNode.position.y) {
-                symbol.setData(SlotmachineManager.instance.getRandomSymbol(false));
+                symbol.setData(this.getResultSymbol());
             }
 
             symbolNode.setPosition(symbolNode.position.x, nextYPos);

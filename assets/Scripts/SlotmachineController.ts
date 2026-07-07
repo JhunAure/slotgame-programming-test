@@ -2,6 +2,7 @@ import { _decorator, Button, Component, Label, Node, Toggle } from 'cc';
 import { ReelController } from './ReelController';
 import { ESlotState } from "./ESlotState";
 import { SlotConfig, SlotmachineManager } from './SlotmachineManager';
+import { ISlotmachineController } from './ISlotmachingController';
 const { ccclass, property } = _decorator;
 
 @ccclass('SlotmachineController')
@@ -51,9 +52,13 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     }
 
     private startSpin() {
+        var spinResult = SlotmachineManager.instance.generateSpinResult();
+        spinResult.print();
+
         this.reelCompletedSpin = 0;
 
         for (let i = 0; i < this.reels.length; i++) {
+            this.reels[i].setSpinResult(spinResult.reels[i]);
             this.reels[i].startSpin(this.autoSpinToggle.isChecked);
         }
     }
@@ -90,9 +95,4 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     public getConfig(): SlotConfig {
         return this.slotConfig;
     }
-}
-
-export interface ISlotmachineController {
-    onReelSpinCompleted();
-    getConfig(): SlotConfig;
 }
