@@ -11,8 +11,7 @@ export class SymbolData {
 @ccclass("SlotConfig")
 export class SlotConfig {
     @property public spinSpeed = 1500;
-    @property public spinDeceleration = 150;
-    @property public spinDecelerationDelay = 3;
+    @property public reelRotations = 10;
 }
 
 @ccclass("SlotmachineManager")

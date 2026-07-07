@@ -27,13 +27,13 @@ export class SlotmachineController extends Component {
         this.slotConfig = SlotmachineManager.instance.getConfig();
 
         for (let i = 0; i < this.reels.length; i++) {
-            this.reels[i].initialize(i);
+            this.reels[i].initialize(i, this.slotConfig);
         }
     }
 
     private onSpinButtonPressed() {
         for (let i = 0; i < this.reels.length; i++) {
-            this.reels[i].spin(this.slotConfig);
+            this.reels[i].spin(false);
         }
     }
 }
