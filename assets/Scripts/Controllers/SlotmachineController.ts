@@ -1,10 +1,11 @@
-import { _decorator, Button, Component, Label, Node, Toggle, ToggleContainer } from 'cc';
+import { __private, _decorator, Button, Component, Label, Node, Toggle, ToggleContainer } from 'cc';
 import { ReelController } from './ReelController';
 import { ESlotState } from "../Enums/ESlotState";
 import { SlotConfig, SlotmachineManager, SpinResult } from '../Managers/SlotmachineManager';
 import { ISlotmachineController } from './ISlotmachingController';
 import { ESpinSpeedMode } from '../Enums/ESpinSpeedMode';
 import { PlayerManager } from '../Managers/PlayerManager';
+import { EventsManager } from '../Managers/EventsManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('SlotmachineController')
@@ -20,6 +21,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     @property(Toggle) spinSpeedToggle1: Toggle;
     @property(Toggle) spinSpeedToggle2: Toggle;
     @property(Toggle) spinSpeedToggle3: Toggle;
+    @property(Button) guidesButton: Button;
 
     private state: ESlotState = ESlotState.Idling;
     private slotConfig: SlotConfig;
@@ -42,6 +44,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         
         this.spinButton?.node.on(Button.EventType.CLICK, this.onSpinButtonPressed, this);
         this.topupButton?.node.on(Button.EventType.CLICK, this.onTopupButtonPressed, this);
+        this.guidesButton?.node.on(Button.EventType.CLICK, this.onGuidesButtonPressed, this);
     }
 
     protected onDisable(): void {
@@ -55,6 +58,11 @@ export class SlotmachineController extends Component implements ISlotmachineCont
 
         this.spinButton?.node.off(Button.EventType.CLICK, this.onSpinButtonPressed, this);
         this.topupButton?.node.off(Button.EventType.CLICK, this.onTopupButtonPressed, this);
+        this.guidesButton?.node.off(Button.EventType.CLICK, this.onGuidesButtonPressed, this);
+    }
+
+    private onGuidesButtonPressed() {
+        EventsManager.instance.events.emit(EventsManager.EVENT_ON_SHOW_GUIDES_POPUP);   
     }
 
     private onTopupButtonPressed(){
