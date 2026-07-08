@@ -10,6 +10,7 @@ export class PlayerData {
 @ccclass('PlayerManager')
 export class PlayerManager extends Component {
     @property(PlayerData) playerData: PlayerData = new PlayerData();
+    @property(CCInteger) balanceTopUpValue = 50;
 
     public static instance: PlayerManager | null = null;
 
@@ -33,6 +34,10 @@ export class PlayerManager extends Component {
 
     protected start() {
 
+    }
+
+    public topup() {
+        this.increaseBalance(this.balanceTopUpValue);
     }
 
     public getCurrentBalance(): number {

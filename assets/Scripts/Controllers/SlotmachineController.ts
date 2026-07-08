@@ -13,6 +13,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     @property(Label) totalWinsLabel: Label;
     @property(Label) balanceLabel: Label;
     @property(Label) spinCostLabel: Label;
+    @property(Button) topupButton: Button;
     @property(Button) spinButton: Button;
     @property(Label) spinButtonLabel: Label;
     @property(Toggle) autoSpinToggle: Toggle;
@@ -40,6 +41,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         this.spinSpeedToggle3?.node.on(Button.EventType.CLICK, this.onToggleThirdSpeed, this);
         
         this.spinButton?.node.on(Button.EventType.CLICK, this.onSpinButtonPressed, this);
+        this.topupButton?.node.on(Button.EventType.CLICK, this.onTopupButtonPressed, this);
     }
 
     protected onDisable(): void {
@@ -52,6 +54,12 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         this.spinSpeedToggle3?.node.off(Button.EventType.CLICK, this.onToggleThirdSpeed, this);
 
         this.spinButton?.node.off(Button.EventType.CLICK, this.onSpinButtonPressed, this);
+        this.topupButton?.node.off(Button.EventType.CLICK, this.onTopupButtonPressed, this);
+    }
+
+    private onTopupButtonPressed(){
+        PlayerManager.instance.topup();
+        this.updateSpinButtonState(true);
     }
 
     private onPlayerBalanceUpdated(remainingBalance: number) {
@@ -121,6 +129,8 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         this.unscheduleAllCallbacks();
 
         this.claimWinnings(false, 0);
+        SlotmachineManager.instance.events.emit(SlotmachineManager.EVENT_ON_SPIN_STARTED);
+
         PlayerManager.instance.deductBalance(this.slotConfig.costPerSpin);
 
         const reelSpinStartDelay = this.slotConfig.spinSpeedModes[this.speedMode].reelSpinStartDelay;
@@ -170,10 +180,12 @@ export class SlotmachineController extends Component implements ISlotmachineCont
             // forces the spin button to be disabled and shows NOT ENOUGH BALANCE! text
             this.spinButton.interactable = false;
             this.spinButtonLabel.string = "NOT ENOUGH\nBALANCE!";
+            this.topupButton.node.active = true;
             return;
         }
         this.spinButton.interactable = interactable;
         this.spinButtonLabel.string = !interactable? "WAIT" : this.state === ESlotState.Idling ? "SPIN" : "STOP";
+        this.topupButton.node.active = this.state === ESlotState.Idling;
     }
 
     private updateState(state: ESlotState) {
@@ -199,10 +211,9 @@ export class SlotmachineController extends Component implements ISlotmachineCont
                 for (const reel of this.reels) {
                     reel.startMatching(this.spinResult.matches);
                 }
+                SlotmachineManager.instance.events.emit(SlotmachineManager.EVENT_ON_MATCH_RESULT_SHOWN, this.spinResult);
+                this.claimWinnings(true, this.spinResult.totalWinAmount);
             }, this.slotConfig.spinSpeedModes[this.speedMode].matchStartDelay);
-            
-
-            this.claimWinnings(true, this.spinResult.totalWinAmount);
         }
     }
 

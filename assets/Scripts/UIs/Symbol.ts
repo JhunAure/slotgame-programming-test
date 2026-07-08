@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Sprite, UITransform, Vec3, Animation } from 'cc';
-import { SymbolData } from './SlotmachineManager';
+import { SymbolData } from '../Managers/SlotmachineManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Symbol')

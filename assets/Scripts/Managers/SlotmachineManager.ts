@@ -1,5 +1,6 @@
 import { _decorator, CCInteger, CCString, Component, SpriteFrame } from "cc";
 import { EPaylineTypes } from '../Enums/EPaylineTypes';
+import { EventTarget } from 'cc';
 
 const { ccclass, property } = _decorator;
 
@@ -13,7 +14,7 @@ export class SymbolData {
 @ccclass("SpinSpeedModeConfig")
 export class SpinSpeedModeConfig {
     @property spinSpeed = 1500;
-    @property reelRotations = 10;
+    @property(CCInteger) reelRotations = 10;
     @property reelSpinStartDelay = 0.5;
     @property matchStartDelay = 0.5;
     @property matchEndDelay = 0.5;
@@ -23,10 +24,10 @@ export class SpinSpeedModeConfig {
 export class SlotConfig {
     @property(SpinSpeedModeConfig) spinSpeedModes: SpinSpeedModeConfig[] = [];
 
-    @property reelCount = 3;
-    @property symbolsPerReel = 5;
+    @property(CCInteger) reelCount = 3;
+    @property(CCInteger) symbolsPerReel = 5;
 
-    @property costPerSpin = 10;
+    @property(CCInteger) costPerSpin = 10;
 }
 
 export class MatchResult {
@@ -85,7 +86,7 @@ export class SpinResult {
 
             if (matched) {
                 matches.push(new MatchResult(payline.type, payline.rows, symbolData));
-                this.totalWinAmount += symbolData.value; 
+                this.totalWinAmount += (symbolData.value * payline.rows.length); 
                 console.log(`[MATCH] ${EPaylineTypes[payline.type]} - Symbol ${symbolData.value}`);
             }
         }
@@ -117,6 +118,10 @@ export class SlotmachineManager extends Component {
     @property([SymbolData]) private symbols: SymbolData[] = [];
 
     public static instance: SlotmachineManager | null = null;
+    
+    public readonly events = new EventTarget();
+    public static readonly EVENT_ON_MATCH_RESULT_SHOWN = "match-result-shown";
+    public static readonly EVENT_ON_SPIN_STARTED = "spin-started";
 
     protected onLoad() {
         if (SlotmachineManager.instance && SlotmachineManager.instance !== this) {
