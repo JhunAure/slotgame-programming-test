@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "Slotmachine",
+    "_name": "SlotmachineController",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Slotmachine",
+    "_name": "SlotmachineController",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -2543,7 +2543,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "Reel"
+    "value": "ReelController"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -2880,7 +2880,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "Reel-001"
+    "value": "ReelController1"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -3199,7 +3199,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "Reel-002"
+    "value": "ReelController2"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -4131,8 +4131,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -95.531,
-      "y": 2.604,
+      "x": -95.53100000000003,
+      "y": 2.603999999999985,
       "z": 0
     },
     "_lrot": {
@@ -4313,6 +4313,8 @@
       "__id__": 0
     },
     "fileId": "daoXRbXixDcKxHJy7QYRjJ",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -4467,6 +4469,8 @@
       "__id__": 0
     },
     "fileId": "f8PPHFI3pAuK2y1XCMF9Bh",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -8389,6 +8393,7 @@
       "__id__": 0
     },
     "fileId": "51CFgRh41HzqT7B25J1Ti3",
+    "instance": null,
     "targetOverrides": [
       {
         "__id__": 434

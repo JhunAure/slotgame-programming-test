@@ -672,7 +672,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "Slotmachine"
+    "value": "SlotmachineController"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1109,7 +1109,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Popups",
+    "_name": "PopupsController",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {

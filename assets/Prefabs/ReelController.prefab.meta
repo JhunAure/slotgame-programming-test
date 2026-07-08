@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "29f4e4c5-a324-45f0-91b5-de026322a906",
+  "uuid": "a9e50a5f-e75b-4624-81d2-2a3ca1dcf1ff",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "Slotmachine"
+    "syncNodeName": "ReelController"
   }
 }
