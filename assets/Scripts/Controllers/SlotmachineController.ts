@@ -12,6 +12,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     @property(ReelController) reels: ReelController[] = [];
     @property(Label) totalWinsLabel: Label;
     @property(Label) balanceLabel: Label;
+    @property(Label) spinCostLabel: Label;
     @property(Button) spinButton: Button;
     @property(Label) spinButtonLabel: Label;
     @property(Toggle) autoSpinToggle: Toggle;
@@ -86,6 +87,8 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         this.spinSpeedToggle2.isChecked = false;
         this.spinSpeedToggle3.isChecked = false;
         this.autoSpinToggle.isChecked = false;
+
+        this.spinCostLabel.string = this.slotConfig.costPerSpin.toString();
 
         this.updateState(ESlotState.Idling);
 

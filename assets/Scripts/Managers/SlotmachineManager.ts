@@ -85,8 +85,8 @@ export class SpinResult {
 
             if (matched) {
                 matches.push(new MatchResult(payline.type, payline.rows, symbolData));
-                console.log(`[MATCH] ${EPaylineTypes[payline.type]} - Symbol ${symbolData.value}`);
                 this.totalWinAmount += symbolData.value; 
+                console.log(`[MATCH] ${EPaylineTypes[payline.type]} - Symbol ${symbolData.value}`);
             }
         }
         if(matches == null || matches.length <= 0){
@@ -96,7 +96,7 @@ export class SpinResult {
     }
 
     public print() {
-        console.log("=== Spin Result ===");
+        console.log("=== [SPIN RESULT] ===");
 
         for (let x = 0; x < this.reels[0].length; x++) {
 

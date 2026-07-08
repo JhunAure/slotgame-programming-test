@@ -35,21 +35,29 @@ export class PlayerManager extends Component {
 
     }
 
-    public getCurrentBalance():number {
+    public getCurrentBalance(): number {
         return this.playerData.balance;
     }
 
     public increaseBalance(amount: number) {
+        const prevBalance = this.playerData.balance;
+
         this.playerData.balance += amount;
         this.events.emit(PlayerManager.EVENT_ON_BALANCE_UPDATE, this.playerData.balance);
+
+        console.log(`[BALANCE] +${amount} | ${prevBalance} → ${this.playerData.balance}`);
     }
 
     public deductBalance(amount: number) {
+        const prevBalance = this.playerData.balance;
+
         this.playerData.balance = Math.max(this.playerData.balance - amount, 0);
         this.events.emit(PlayerManager.EVENT_ON_BALANCE_UPDATE, this.playerData.balance);
+
+        console.log(`[BALANCE] -${amount} | ${prevBalance} → ${this.playerData.balance}`);
     }
 
-    public hasEnoughBalance(amount: number) : boolean{
+    public hasEnoughBalance(amount: number): boolean {
         return this.playerData.balance >= amount;
     }
 }
