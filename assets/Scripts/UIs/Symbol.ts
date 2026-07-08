@@ -31,7 +31,7 @@ export class Symbol extends Component {
             this.animation.once(Animation.EventType.FINISHED, onFinished);
         }
 
-        this.animation.play("symbol_match");
+        this.animation.play("node_scale_bounce");
     }
 
     public stopMatchAnimation()

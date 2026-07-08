@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "3c29ff16-3d53-4ca2-923a-a7f05809f24e",
+  "uuid": "24bbb05a-c4d8-4d4f-973a-b5644d3deaad",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "3c29ff16-3d53-4ca2-923a-a7f05809f24e@6c48a",
-      "displayName": "Payline-4",
+      "uuid": "24bbb05a-c4d8-4d4f-973a-b5644d3deaad@6c48a",
+      "displayName": "payline_4",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "3c29ff16-3d53-4ca2-923a-a7f05809f24e",
+        "imageUuidOrDatabaseUri": "24bbb05a-c4d8-4d4f-973a-b5644d3deaad",
         "isUuid": true,
         "visible": false,
         "minfilter": "nearest",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "3c29ff16-3d53-4ca2-923a-a7f05809f24e@f9941",
-      "displayName": "Payline-4",
+      "uuid": "24bbb05a-c4d8-4d4f-973a-b5644d3deaad@f9941",
+      "displayName": "payline_4",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "3c29ff16-3d53-4ca2-923a-a7f05809f24e@6c48a",
+        "imageUuidOrDatabaseUri": "24bbb05a-c4d8-4d4f-973a-b5644d3deaad@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "3c29ff16-3d53-4ca2-923a-a7f05809f24e@6c48a"
+    "redirect": "24bbb05a-c4d8-4d4f-973a-b5644d3deaad@6c48a"
   }
 }

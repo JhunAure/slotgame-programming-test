@@ -11,7 +11,7 @@ export class PaylineHUDItem extends Component {
     public show(winAmount: number){
         this.winAmountLabel.string = "+"+winAmount.toString();
         this.setState(true);
-        this.animation.play("symbol_match");
+        this.animation.play("node_scale_bounce");
     }
 
     public hide(){

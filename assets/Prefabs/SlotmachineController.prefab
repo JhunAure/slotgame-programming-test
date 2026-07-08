@@ -275,7 +275,7 @@
         "__id__": 10
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 16
@@ -525,7 +525,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "000",
+    "_string": "0",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 60,
@@ -854,7 +854,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "PaylineHUDItem-001"
+    "value": "PaylineHUDItem1"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1001,7 +1001,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "PaylineHUDItem-002"
+    "value": "PaylineHUDItem2"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1148,7 +1148,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "PaylineHUDItem-003"
+    "value": "PaylineHUDItem3"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1295,7 +1295,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "PaylineHUDItem-004"
+    "value": "PaylineHUDItem4"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1442,7 +1442,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "PaylineHUDItem-005"
+    "value": "PaylineHUDItem5"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1589,7 +1589,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "PaylineHUDItem-006"
+    "value": "PaylineHUDItem6"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1736,7 +1736,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "PaylineHUDItem-007"
+    "value": "PaylineHUDItem7"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1883,7 +1883,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "PaylineHUDItem-008"
+    "value": "PaylineHUDItem8"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1980,7 +1980,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 704,
+      "width": -16,
       "height": 111.303
     },
     "_anchorPoint": {
@@ -4042,7 +4042,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "0000",
+    "_string": "50",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 31,
@@ -4736,7 +4736,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "00",
+    "_string": "10",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 31,
@@ -5405,7 +5405,7 @@
       "__id__": 305
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 307
@@ -5797,7 +5797,7 @@
       "__id__": 305
     },
     "checkEvents": [],
-    "_isChecked": false,
+    "_isChecked": true,
     "_checkMark": {
       "__id__": 309
     },
@@ -6518,7 +6518,7 @@
       "__id__": 351
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 353
@@ -7182,7 +7182,7 @@
       "__id__": 351
     },
     "checkEvents": [],
-    "_isChecked": true,
+    "_isChecked": false,
     "_checkMark": {
       "__id__": 355
     },
@@ -8393,7 +8393,6 @@
       "__id__": 0
     },
     "fileId": "51CFgRh41HzqT7B25J1Ti3",
-    "instance": null,
     "targetOverrides": [
       {
         "__id__": 434

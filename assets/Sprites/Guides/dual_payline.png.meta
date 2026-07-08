@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "20803a21-ebaa-4ef2-8de8-0e02497404c6",
+  "uuid": "8a0f8651-2a07-473b-b327-f899e3fd8178",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "20803a21-ebaa-4ef2-8de8-0e02497404c6@6c48a",
-      "displayName": "Payline-6",
+      "uuid": "8a0f8651-2a07-473b-b327-f899e3fd8178@6c48a",
+      "displayName": "dual_payline",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "20803a21-ebaa-4ef2-8de8-0e02497404c6",
+        "imageUuidOrDatabaseUri": "8a0f8651-2a07-473b-b327-f899e3fd8178",
         "isUuid": true,
         "visible": false,
         "minfilter": "nearest",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "20803a21-ebaa-4ef2-8de8-0e02497404c6@f9941",
-      "displayName": "Payline-6",
+      "uuid": "8a0f8651-2a07-473b-b327-f899e3fd8178@f9941",
+      "displayName": "dual_payline",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "20803a21-ebaa-4ef2-8de8-0e02497404c6@6c48a",
+        "imageUuidOrDatabaseUri": "8a0f8651-2a07-473b-b327-f899e3fd8178@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "20803a21-ebaa-4ef2-8de8-0e02497404c6@6c48a"
+    "redirect": "8a0f8651-2a07-473b-b327-f899e3fd8178@6c48a"
   }
 }
