@@ -1,4 +1,4 @@
-import { _decorator, Animation, Color, Component, math, Node, Sprite } from 'cc';
+import { _decorator, Animation, Color, Component, math, Node, Sprite, Label } from 'cc';
 import { SlotmachineManager, SpinResult } from '../Managers/SlotmachineManager';
 const { ccclass, property } = _decorator;
 
@@ -6,20 +6,22 @@ const { ccclass, property } = _decorator;
 export class PaylineHUDItem extends Component {
     @property(Sprite) private sprite: Sprite;
     @property(Animation) private animation: Animation;
+    @property(Label) private winAmountLabel: Label;
 
-    public startAnimation(){
+    public show(winAmount: number){
+        this.winAmountLabel.string = "+"+winAmount.toString();
         this.setState(true);
         this.animation.play("symbol_match");
     }
 
-    public stopAnimation(){
+    public hide(){
         this.setState(false);
         this.animation.stop();
+        this.winAmountLabel.string = "";
     }
 
     private setState(enable: boolean){
-        this.sprite.grayscale = !enable;
-        this.sprite.color = new Color(255, 255, 255, enable? 255: 150);
+        this.node.active = enable;
     }
 }
 

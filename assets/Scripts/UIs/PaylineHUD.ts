@@ -24,7 +24,9 @@ export class PaylineHUD extends Component {
     }
 
     private onSpinStarted() {
-        this.resetPaylines();
+        if (this.hasMatchedPaylines) {
+            this.resetPaylines(); // avoid re-reset if not changes in payline states
+        }
     }
 
     private onMatchResultShown(spinResult: SpinResult) {
@@ -32,19 +34,15 @@ export class PaylineHUD extends Component {
 
         for (let i = 0; i < spinResult.matches.length; i++) {
             const match = spinResult.matches[i];
-            this.paylines[match.payline].startAnimation();
+            this.paylines[match.payline].show(match.symbol.value * 3);
         }
     }
 
     private resetPaylines() {
-        if(!this.hasMatchedPaylines){
-            return; // avoid re-reset if not changes in payline states
-        }
-
         this.hasMatchedPaylines = false;
 
         for (let i = 0; i < this.paylines.length; i++) {
-            this.paylines[i].stopAnimation();
+            this.paylines[i].hide();
         }
     }
 }
