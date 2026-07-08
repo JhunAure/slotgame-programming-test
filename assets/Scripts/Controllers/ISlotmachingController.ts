@@ -1,4 +1,4 @@
-import { SlotConfig } from "./SlotmachineManager";
+import { SlotConfig } from "../Managers/SlotmachineManager";
 
 export interface ISlotmachineController {
     onReelSpinCompleted();

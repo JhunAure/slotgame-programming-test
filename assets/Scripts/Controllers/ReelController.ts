@@ -1,9 +1,9 @@
 import { _decorator, Component, Layout } from 'cc';
-import { Symbol } from './Symbol';
-import { ESlotState } from './ESlotState';
-import { MatchResult, SlotConfig, SlotmachineManager, SymbolData } from './SlotmachineManager';
+import { Symbol } from '../Symbol';
+import { ESlotState } from '../Enums/ESlotState';
+import { MatchResult, SlotConfig, SlotmachineManager, SymbolData } from '../Managers/SlotmachineManager';
 import { ISlotmachineController } from './ISlotmachingController';
-import { ESpinSpeedMode } from './ESpinSpeedMode';
+import { ESpinSpeedMode } from '../Enums/ESpinSpeedMode';
 
 const { ccclass, property } = _decorator;
 

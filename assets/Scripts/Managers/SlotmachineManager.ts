@@ -1,5 +1,5 @@
 import { _decorator, CCInteger, CCString, Component, SpriteFrame } from "cc";
-import { EPaylineTypes } from "./EPaylineTypes";
+import { EPaylineTypes } from '../Enums/EPaylineTypes';
 
 const { ccclass, property } = _decorator;
 
@@ -24,7 +24,9 @@ export class SlotConfig {
     @property(SpinSpeedModeConfig) spinSpeedModes: SpinSpeedModeConfig[] = [];
 
     @property reelCount = 3;
-    @property visibleRows = 5;
+    @property symbolsPerReel = 5;
+
+    @property costPerSpin = 10;
 }
 
 export class MatchResult {
@@ -58,9 +60,12 @@ const PAYLINES = [
 export class SpinResult {
 
     public reels: SymbolData[][] = [];
+    public matches: MatchResult[] = [];
+    public totalWinAmount: number = 0;
 
     constructor(reels: SymbolData[][]) {
         this.reels = reels;
+        this.matches = this.getMatches();
     }
 
     public getMatches(): MatchResult[] {
@@ -81,6 +86,7 @@ export class SpinResult {
             if (matched) {
                 matches.push(new MatchResult(payline.type, payline.rows, symbolData));
                 console.log(`[MATCH] ${EPaylineTypes[payline.type]} - Symbol ${symbolData.value}`);
+                this.totalWinAmount += symbolData.value; 
             }
         }
         if(matches == null || matches.length <= 0){
@@ -110,10 +116,21 @@ export class SlotmachineManager extends Component {
     @property(SlotConfig) private config = new SlotConfig();
     @property([SymbolData]) private symbols: SymbolData[] = [];
 
-    public static instance: SlotmachineManager;
+    public static instance: SlotmachineManager | null = null;
 
     protected onLoad() {
+        if (SlotmachineManager.instance && SlotmachineManager.instance !== this) {
+            this.node.destroy();
+            return;
+        }
+
         SlotmachineManager.instance = this;
+    }
+
+    protected onDestroy() {
+        if (SlotmachineManager.instance === this) {
+            SlotmachineManager.instance = null;
+        }
     }
 
     public getConfig(): SlotConfig {
@@ -125,7 +142,7 @@ export class SlotmachineManager extends Component {
         const reels: SymbolData[][] = [];
 
         for (let i = 0; i < this.config.reelCount; i++) {
-            reels.push(this.generateReelResult(this.config.visibleRows, true));
+            reels.push(this.generateReelResult(this.config.symbolsPerReel, true));
         }
 
         return new SpinResult(reels);
