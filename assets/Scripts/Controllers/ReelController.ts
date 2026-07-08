@@ -1,5 +1,5 @@
 import { _decorator, Component, Layout } from 'cc';
-import { Symbol } from '../Symbol';
+import { Symbol } from '../UIs/Symbol';
 import { ESlotState } from '../Enums/ESlotState';
 import { MatchResult, SlotConfig, SlotmachineManager, SymbolData } from '../Managers/SlotmachineManager';
 import { ISlotmachineController } from './ISlotmachingController';
@@ -133,7 +133,6 @@ export class ReelController extends Component {
 
         if (remainingDistance <= 0.001) {
             this.stopSymbols();
-            this.controller.onReelSpinCompleted();
             return;
         }
 
