@@ -1,4 +1,4 @@
-import { _decorator, CCInteger, CCString, Component, SpriteFrame } from "cc";
+import { _decorator, CCBoolean, CCInteger, CCString, Component, SpriteFrame } from "cc";
 import { EPaylineTypes } from '../Enums/EPaylineTypes';
 import { EventTarget } from 'cc';
 
@@ -9,6 +9,8 @@ export class SymbolData {
     @property(SpriteFrame) texture: SpriteFrame = null!;
     @property(CCString) name = "";
     @property(CCInteger) value = 0;
+    @property(CCInteger) weight = 1;
+    @property(CCBoolean) isWild = false;
 }
 
 @ccclass("SpinSpeedModeConfig")
@@ -74,26 +76,69 @@ export class SpinResult {
 
         for (const payline of PAYLINES) {
 
-            const symbolData = this.reels[0][payline.rows[0]];
-            let matched = true;
+            const winningSymbol = this.getWinningSymbol(payline.rows);
 
-            for (let reel = 1; reel < this.reels.length; reel++) {
-                if (this.reels[reel][payline.rows[reel]].value !== symbolData.value) {
-                    matched = false;
-                    break;
-                }
+            if (winningSymbol == null) {
+                continue;
             }
 
-            if (matched) {
-                matches.push(new MatchResult(payline.type, payline.rows, symbolData));
-                this.totalWinAmount += (symbolData.value * payline.rows.length); 
-                console.log(`[MATCH] ${EPaylineTypes[payline.type]} - Symbol ${symbolData.value}`);
-            }
+            matches.push(
+                new MatchResult(
+                    payline.type,
+                    payline.rows,
+                    winningSymbol
+                )
+            );
+
+            this.totalWinAmount += winningSymbol.value * payline.rows.length;
+
+            console.log(
+                `[MATCH] ${EPaylineTypes[payline.type]} - ${winningSymbol.name}`
+            );
         }
-        if(matches == null || matches.length <= 0){
-            console.log(`[NO MATCH]`);
+
+        if (matches.length === 0) {
+            console.log("[NO MATCH]");
         }
+
         return matches;
+    }
+
+    private getWinningSymbol(rows: number[]): SymbolData | null {
+
+        let baseSymbol: SymbolData | null = null;
+
+        // Find the first non-Wild symbol
+        for (let reel = 0; reel < this.reels.length; reel++) {
+
+            const symbol = this.reels[reel][rows[reel]];
+
+            if (!symbol.isWild) {
+                baseSymbol = symbol;
+                break;
+            }
+        }
+
+        // All symbols are Wild -> pay as Wild
+        if (baseSymbol == null) {
+            return this.reels[0][rows[0]];
+        }
+
+        // Validate the payline
+        for (let reel = 0; reel < this.reels.length; reel++) {
+
+            const symbol = this.reels[reel][rows[reel]];
+
+            if (symbol.isWild) {
+                continue;
+            }
+
+            if (symbol.name !== baseSymbol.name) {
+                return null;
+            }
+        }
+
+        return baseSymbol;
     }
 
     public print() {
@@ -118,7 +163,7 @@ export class SlotmachineManager extends Component {
     @property([SymbolData]) private symbols: SymbolData[] = [];
 
     public static instance: SlotmachineManager | null = null;
-    
+
     public readonly events = new EventTarget();
     public static readonly EVENT_ON_MATCH_RESULT_SHOWN = "match-result-shown";
     public static readonly EVENT_ON_SPIN_STARTED = "spin-started";
@@ -182,20 +227,21 @@ export class SlotmachineManager extends Component {
     }
 
     private getRandomWeightedSymbol(): SymbolData {
+
         let totalWeight = 0;
 
-        for (let i = 0; i < this.symbols.length; i++) {
-            totalWeight += this.symbols.length - i;
+        for (const symbol of this.symbols) {
+            totalWeight += symbol.weight;
         }
 
         let random = Math.random() * totalWeight;
 
-        for (let i = 0; i < this.symbols.length; i++) {
+        for (const symbol of this.symbols) {
 
-            random -= this.symbols.length - i;
+            random -= symbol.weight;
 
-            if (random <= 0) {
-                return this.symbols[i];
+            if (random < 0) {
+                return symbol;
             }
         }
 

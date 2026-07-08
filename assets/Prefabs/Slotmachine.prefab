@@ -525,7 +525,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "00000000",
+    "_string": "000",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 60,
@@ -2416,7 +2416,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "3defc019-6b95-46ad-8fb1-252352d3e595@f9941",
@@ -2551,7 +2551,7 @@
       "__type__": "cc.Vec3",
       "x": 1,
       "y": 1,
-      "z": 1
+      "z": 0
     },
     "_mobility": 0,
     "_layer": 33554432,
@@ -2611,7 +2611,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "3c29ff16-3d53-4ca2-923a-a7f05809f24e@f9941",
@@ -2746,7 +2746,7 @@
       "__type__": "cc.Vec3",
       "x": 1,
       "y": 1,
-      "z": 1
+      "z": 0
     },
     "_mobility": 0,
     "_layer": 33554432,
@@ -2806,7 +2806,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "20803a21-ebaa-4ef2-8de8-0e02497404c6@f9941",
@@ -3001,7 +3001,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "24bbb05a-c4d8-4d4f-973a-b5644d3deaad@f9941",
@@ -3136,7 +3136,7 @@
       "__type__": "cc.Vec3",
       "x": 1,
       "y": 1,
-      "z": 1
+      "z": 0
     },
     "_mobility": 0,
     "_layer": 33554432,
@@ -3196,7 +3196,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "04ddfc25-8dbe-43b2-b26f-c47f64f43687@f9941",
@@ -3533,7 +3533,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "eeb7570f-201c-4c23-8d64-f10f394a408c@f9941",
@@ -3668,7 +3668,7 @@
       "__type__": "cc.Vec3",
       "x": 1,
       "y": 1,
-      "z": 1
+      "z": 0
     },
     "_mobility": 0,
     "_layer": 33554432,
@@ -3728,7 +3728,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "fdf45cd3-40de-469d-b146-c0b0100dfa1d@f9941",
@@ -3863,7 +3863,7 @@
       "__type__": "cc.Vec3",
       "x": 1,
       "y": 1,
-      "z": 1
+      "z": 0
     },
     "_mobility": 0,
     "_layer": 33554432,
@@ -3923,7 +3923,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "1410b2fc-cc81-48d8-829a-51449bacdb6a@f9941",
@@ -4058,7 +4058,7 @@
       "__type__": "cc.Vec3",
       "x": 1,
       "y": 1,
-      "z": 1
+      "z": 0
     },
     "_mobility": 0,
     "_layer": 33554432,
@@ -4118,7 +4118,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 135
+      "a": 150
     },
     "_spriteFrame": {
       "__uuid__": "da98f7bc-2cfb-4f6b-a298-5041c046f21d@f9941",
@@ -4599,7 +4599,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "000",
+    "_string": "0000",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 31,
@@ -5293,7 +5293,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "000",
+    "_string": "00",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 31,
@@ -5962,7 +5962,7 @@
       "__id__": 302
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 304
@@ -6354,7 +6354,7 @@
       "__id__": 302
     },
     "checkEvents": [],
-    "_isChecked": true,
+    "_isChecked": false,
     "_checkMark": {
       "__id__": 306
     },
@@ -7075,7 +7075,7 @@
       "__id__": 348
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 350
@@ -7172,7 +7172,7 @@
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -7739,7 +7739,7 @@
       "__id__": 348
     },
     "checkEvents": [],
-    "_isChecked": false,
+    "_isChecked": true,
     "_checkMark": {
       "__id__": 352
     },
@@ -8023,7 +8023,7 @@
       "__id__": 389
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 391
@@ -8435,7 +8435,7 @@
       "__id__": 389
     },
     "checkEvents": [],
-    "_isChecked": true,
+    "_isChecked": false,
     "_checkMark": {
       "__id__": 393
     },

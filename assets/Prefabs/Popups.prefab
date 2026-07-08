@@ -99,6 +99,10 @@
     "__prefab": {
       "__id__": 5
     },
+    "guidesPopup": {
+      "__uuid__": "88cb528e-0061-49b6-8004-8bdf593e4332",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": ""
   },
   {
