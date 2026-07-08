@@ -248,7 +248,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     private endSequence() {
         const hasBalance = this.hasBalance();
 
-        if (this.state === ESlotState.AutoSpinning && hasBalance) {
+        if (this.isAutoSpinActive() && hasBalance) {
             this.scheduleOnce(this.autoSpinCallback, this.slotConfig.spinSpeedModes[this.speedMode].matchEndDelay);
         }
         else {
@@ -257,6 +257,10 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         }
 
         this.updateSpinButtonState(true);
+    }
+
+    private isAutoSpinActive(): boolean{
+        return this.state === ESlotState.AutoSpinning && this.autoSpinToggle.isChecked;
     }
 
     private hasBalance(): boolean {
