@@ -109,7 +109,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         this.updateState(ESlotState.Idling);
 
         for (let i = 0; i < this.reels.length; i++) {
-            this.reels[i].initialize(i, this);
+            // this.reels[i].initialize(i, this);
         }
 
         this.claimWinnings(false, 0);
@@ -117,6 +117,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     }
 
     private onSpinButtonPressed() {
+        this.startSpin();
         if (this.state != ESlotState.Idling && this.state != ESlotState.Matching) {
             this.updateState(ESlotState.Idling);
             this.stopSpin();
@@ -155,7 +156,9 @@ export class SlotmachineController extends Component implements ISlotmachineCont
 
 
         for (let i = 0; i < this.reels.length; i++) {
-            this.reels[i].setSpinResult(this.spinResult.reels[i]);
+            // this.reels[i].setSpinResult(this.spinResult.reels[i]);
+            
+            this.reels[i].startSpin();
 
             if (reelSpinStartDelay > 0) {
                 this.scheduleOnce(() => this.spinReel(i, this.speedMode), i * reelSpinStartDelay)
@@ -167,7 +170,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
     }
 
     private spinReel(i: number, spinMode: ESpinSpeedMode) {
-        this.reels[i].startSpin(this.autoSpinToggle.isChecked, spinMode);
+        // this.reels[i].startSpin(this.autoSpinToggle.isChecked, spinMode);
 
         // only reenable spin button if all reels has started spinning, to prevent unwanted behavior when spamming spin/stop 
         if(i >= this.reels.length - 1)
@@ -178,11 +181,12 @@ export class SlotmachineController extends Component implements ISlotmachineCont
         this.unscheduleAllCallbacks();
 
         for (let i = 0; i < this.reels.length; i++) {
-            this.reels[i].stopSpin();
+            // this.reels[i].stopSpin();
         }
     }
 
     private updateSpinButtonState(interactable: boolean) {
+        interactable = true;
         // TODO: refactor this function to separate no balance checking and spin state checking
         if(interactable && this.state === ESlotState.Idling && !this.hasBalance()){
             // forces the spin button to be disabled and shows NOT ENOUGH BALANCE! text
@@ -217,7 +221,7 @@ export class SlotmachineController extends Component implements ISlotmachineCont
 
             this.scheduleOnce(() => {
                 for (const reel of this.reels) {
-                    reel.startMatching(this.spinResult.matches);
+                    // reel.startMatching(this.spinResult.matches);
                 }
                 SlotmachineManager.instance.events.emit(SlotmachineManager.EVENT_ON_MATCH_RESULT_SHOWN, this.spinResult);
                 this.claimWinnings(true, this.spinResult.totalWinAmount);
